@@ -1,5 +1,6 @@
 import { SignOutButton } from '@/components/SignOutButton'
 import { UserButton } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 
@@ -8,7 +9,9 @@ const links = [
   { name: 'History', href: '/history' },
 ]
 
-const DashboardLayout = ({ children }: { children: ReactNode }) => {
+const DashboardLayout = async ({ children }: { children: ReactNode }) => {
+  const user = await currentUser()
+  console.log('user', user)
   return (
     <div className="w-screen h-screen relative">
       <aside className="absolute left-0 top-0 h-full w-[200px] border-r border-black/10">
@@ -29,7 +32,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         <header className="h-[60px] border-b border-black/10">
           <nav className="px-4 h-full">
             <div className="flex items-center justify-end h-full">
-              <SignOutButton />
+              <SignOutButton userImageUrl={user?.imageUrl || ''} />
             </div>
           </nav>
         </header>
