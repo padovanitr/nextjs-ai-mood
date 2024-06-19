@@ -11,7 +11,7 @@ const links = [
 
 const DashboardLayout = async ({ children }: { children: ReactNode }) => {
   const user = await currentUser()
-  console.log('user', user)
+
   return (
     <div className="w-screen h-screen relative">
       <aside className="absolute left-0 top-0 h-full w-[200px] border-r border-black/10">

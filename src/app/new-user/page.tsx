@@ -10,7 +10,6 @@ const createNewUser = async () => {
       email: user?.emailAddresses[0].emailAddress as string,
     },
   })
-  console.log('match', match)
 
   if (!match) {
     await prisma.user.create({
@@ -22,7 +21,6 @@ const createNewUser = async () => {
 
     redirect('/sign-in')
   } else {
-    console.log('entrou aqui')
     redirect('/journal')
   }
 }

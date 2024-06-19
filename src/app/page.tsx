@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default async function Home() {
   const { userId } = auth()
-  console.log('userId', userId)
+
   const href = userId ? '/journal' : '/new-user'
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-black">
