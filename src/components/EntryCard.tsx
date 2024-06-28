@@ -1,6 +1,6 @@
-import { JornalEntry } from '@prisma/client'
+import { JournalEntry } from '@prisma/client'
 
-type JournalEntryType = JornalEntry & {
+type JournalEntryType = JournalEntry & {
   analysis?: {
     summary: string
     mood: string

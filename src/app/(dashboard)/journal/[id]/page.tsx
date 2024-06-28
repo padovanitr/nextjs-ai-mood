@@ -4,7 +4,7 @@ import { prisma } from '@/utils/db'
 
 const getEntry = async (id: string) => {
   const user = await getUserByClerkId()
-  const entry = await prisma.jornalEntry.findUnique({
+  const entry = await prisma.journalEntry.findUnique({
     where: {
       userId_id: {
         userId: user?.id as string,
