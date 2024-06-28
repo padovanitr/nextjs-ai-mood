@@ -1,12 +1,17 @@
 'use client'
 
+import { createNewEntry } from '@/utils/api'
 import { revalidatePath } from 'next/cache'
 import { useRouter } from 'next/navigation'
 
 const NewEntry = () => {
   const router = useRouter()
 
-  const handleOnClick = async () => {}
+  const handleOnClick = async () => {
+    const data = await createNewEntry()
+    console.log('data', data)
+    router.push(`/journal/${data.id}`)
+  }
 
   return (
     <div

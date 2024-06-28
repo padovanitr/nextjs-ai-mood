@@ -27,14 +27,14 @@ const JournalPage = async () => {
       <div className="my-8">Question</div>
       <div className="grid grid-cols-3 gap-4">
         <NewEntry />
+        {entries.map((entry) => (
+          <div key={entry.id}>
+            <Link href={`/journal/${entry.id}`}>
+              <EntryCard entry={entry} />
+            </Link>
+          </div>
+        ))}
       </div>
-      {entries.map((entry) => (
-        <div key={entry.id}>
-          <Link href={`/journal/${entry.id}`}>
-            <EntryCard entry={entry} />
-          </Link>
-        </div>
-      ))}
     </div>
   )
 }
