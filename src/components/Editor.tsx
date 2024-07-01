@@ -1,12 +1,49 @@
 'use client'
 
-const Editor = () => {
+import { updateEntry } from '@/utils/api'
+import { JournalEntry } from '@prisma/client'
+import { useState } from 'react'
+import { useAutosave } from 'react-autosave'
+import Spinner from './Spinner'
+
+interface EditorProps {
+  entry: JournalEntry | null
+}
+
+const Editor = ({ entry }: EditorProps) => {
+  const [text, setText] = useState(entry?.content)
+  const [currentEntry, setEntry] = useState(entry)
+  const [isSaving, setIsSaving] = useState(false)
+
+  useAutosave({
+    data: text,
+    onSave: async (_text) => {
+      if (_text === entry?.content) return
+      setIsSaving(true)
+
+      const { data } = await updateEntry(entry?.id as string, _text as string)
+
+      setEntry(data)
+      setIsSaving(false)
+    },
+  })
+
   return (
     <div className="w-full h-full grid grid-cols-3 gap-0 relative">
       <div className="absolute left-0 top-0 p-2">
-        <div className="w-[16px] h-[16px] rounded-full bg-green-500"></div>
+        {isSaving ? (
+          <Spinner />
+        ) : (
+          <div className="w-[16px] h-[16px] rounded-full bg-green-500"></div>
+        )}
       </div>
-      <div className="col-span-2"></div>
+      <div className="col-span-2">
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          className="w-full h-full text-xl p-8"
+        />
+      </div>
       <div className="border-l border-black/5">
         <div className="h-[100px] bg-blue-600 text-white p-8">
           <h2 className="text-2xl bg-white/25 text-black">Analysis</h2>
