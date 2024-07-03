@@ -7,8 +7,6 @@ export const createNewEntry = async () => {
     })
   )
 
-  console.log('res', res)
-
   if (res.ok) {
     const data = await res.json()
     return data.data

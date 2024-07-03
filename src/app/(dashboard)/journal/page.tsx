@@ -1,5 +1,6 @@
 import EntryCard from '@/components/EntryCard'
 import NewEntry from '@/components/NewEntryCard'
+import { analyze } from '@/utils/ai'
 import { getUserByClerkId } from '@/utils/auth'
 import { prisma } from '@/utils/db'
 import Link from 'next/link'
@@ -20,7 +21,7 @@ const getEntries = async () => {
 
 const JournalPage = async () => {
   const entries = await getEntries()
-  console.log('entries', entries)
+
   return (
     <div className="px-6 py-8 bg-zinc-100/50 h-full">
       <h1 className="text-4xl mb-12">Journals</h1>
