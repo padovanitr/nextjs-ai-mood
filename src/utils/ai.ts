@@ -5,6 +5,10 @@ import {
   OutputFixingParser,
 } from 'langchain/output_parsers'
 import z from 'zod'
+import { Document } from 'langchain/document'
+import { loadQARefineChain } from 'langchain/chains'
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
+import { MemoryVectorStore } from 'langchain/vectorstores/memory'
 
 const parser = StructuredOutputParser.fromZodSchema(
   z.object({
@@ -61,4 +65,37 @@ export const analyze = async (entry: string) => {
     const fix = await fixParser.parse(result)
     return fix
   }
+}
+
+type EntryType = {
+  id: string
+  createdAt: Date
+  content: string
+}
+
+export const qa = async (question: string, entries: EntryType[]) => {
+  const docs = entries.map((entry) => {
+    return new Document({
+      pageContent: entry.content,
+      metadata: {
+        id: entry.id,
+        createdAt: entry.createdAt,
+      },
+    })
+  })
+
+  const model = new OpenAI({
+    temperature: 0,
+    modelName: 'gpt-3.5-turbo',
+  })
+  const chain = loadQARefineChain(model)
+  const emdeddings = new OpenAIEmbeddings()
+  const store = await MemoryVectorStore.fromDocuments(docs, emdeddings)
+  const relevanteDocs = await store.similaritySearch(question)
+  const res = await chain.call({
+    input_documents: relevanteDocs,
+    question,
+  })
+
+  return res.output_text
 }

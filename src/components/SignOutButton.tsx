@@ -1,5 +1,6 @@
 'use client'
 
+import useClickAway from '@/utils/hooks/useClickAway'
 import { useClerk } from '@clerk/nextjs'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -19,8 +20,10 @@ export const SignOutButton = ({ userImageUrl }: SignOutButtonProps) => {
     router.push('/')
   }
 
+  const ref = useClickAway(() => setShowOptions(false))
+
   return (
-    <div className="relative">
+    <div className="relative" ref={ref}>
       <button onClick={() => setShowOptions((prevState) => !prevState)}>
         <Image
           alt="user picture"
